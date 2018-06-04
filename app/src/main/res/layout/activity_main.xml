@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp"
+    tools:context=".activity.MainActivity"
+    android:background="@drawable/bg">
+
+    <ImageView android:id="@+id/am_iv_logo"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_marginBottom="24dp"
+        android:src="@drawable/logo"/>
+
+    <EditText android:id="@+id/am_et_mobile_no"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/am_iv_logo"
+        android:background="@drawable/et_bg"
+        android:layout_marginTop="24dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:padding="16dp"
+        android:hint="Mobile Number"
+        android:textColorHint="#000000"
+        android:maxLines="1"
+        android:inputType="text"
+        android:drawableLeft="@drawable/user"
+        android:drawablePadding="12dp"
+        android:textSize="20sp"/>
+
+    <EditText android:id="@+id/am_et_pwd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/am_et_mobile_no"
+        android:background="@drawable/et_bg"
+        android:layout_marginTop="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginBottom="32dp"
+        android:padding="16dp"
+        android:hint="Password"
+        android:textColorHint="#000000"
+        android:maxLines="1"
+        android:inputType="textPassword"
+        android:drawableLeft="@drawable/pwd"
+        android:drawablePadding="12dp"
+        android:textSize="20sp"/>
+
+    <Button android:id="@+id/am_bt_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/am_et_pwd"
+        android:background="@drawable/bt_bg"
+        android:text="Login"
+        android:layout_centerInParent="true"
+        android:textAllCaps="false"
+        android:textSize="20sp"
+        android:padding="12dp"
+        />
+
+    <TextView android:id="@+id/am_tv_fpwd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Forgot password?"
+        android:textSize="18sp"
+        android:layout_centerInParent="true"
+        android:textColor="@color/colorPrimary"
+        android:layout_margin="32dp"
+        android:layout_below="@+id/am_bt_login"/>
+
+    <TextView android:id="@+id/am_tv_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Register"
+        android:textSize="18sp"
+        android:layout_centerInParent="true"
+        android:textColor="@color/colorPrimary"
+        android:layout_below="@+id/am_tv_fpwd"
+
+       />
+
+
+
+
+</RelativeLayout>
