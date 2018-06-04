@@ -24,6 +24,7 @@
         <activity android:name=".activity.CancelHistoryActivity"/>
         <activity android:name=".activity.ChangePasswordActivity"/>
         <activity android:name=".activity.RegisterActivity"/>
+        <activity android:name=".activity.SplashActivity"/>
 
     </application>
 
