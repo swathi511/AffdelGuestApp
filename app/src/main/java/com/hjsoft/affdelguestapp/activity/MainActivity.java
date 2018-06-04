@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Paint;
 import android.icu.text.UnicodeSetSpanner;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         etLogin=(EditText)findViewById(R.id.am_et_mobile_no);
         etPwd=(EditText)findViewById(R.id.am_et_pwd);
         tvRegister=(TextView)findViewById(R.id.am_tv_register);
+        tvRegister.setPaintFlags(tvRegister.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
 
         tvRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                stLogin=etLogin.getText().toString().trim();
+                /*stLogin=etLogin.getText().toString().trim();
                 stPwd=etPwd.getText().toString().trim();
 
                 if(stLogin.length()==0||stPwd.length()==0)
@@ -204,14 +206,14 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
                 }
+*/
 
 
 
 
-
-                /*Intent i=new Intent(MainActivity.this,ParcelBookingActivity.class);
+                Intent i=new Intent(MainActivity.this,ParcelBookingActivity.class);
                 startActivity(i);
-                finish();*/
+                finish();
             }
         });
     }

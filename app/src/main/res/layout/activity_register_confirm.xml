@@ -3,16 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="12dp"
     tools:context=".activity.MainActivity"
     android:background="@drawable/bg"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingTop="12dp">
 
     <ImageView android:id="@+id/am_iv_logo"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:layout_marginBottom="24dp"
         android:src="@drawable/logo"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorAccent"
+        android:layout_marginBottom="24dp"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -29,21 +34,18 @@
         android:orientation="horizontal"
         android:gravity="center">
 
-        <TextView
+        <TextView android:id="@+id/arc_tv_mobile_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="right"
-            android:text="+919032871453"
+            android:text="+91xxxxxxxxxx"
             android:textColor="@color/colorWhite"/>
-        <ImageView
+        <ImageView android:id="@+id/arc_iv_edit_number"
             android:layout_width="16dp"
             android:layout_height="16dp"
-
             android:layout_gravity="center"
             android:src="@drawable/edit"
-            android:layout_marginLeft="8dp"
-
-            />
+            android:layout_marginLeft="8dp" />
 
 
 

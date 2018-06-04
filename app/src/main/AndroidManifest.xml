@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -12,6 +13,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCLdNGTurH2DNzHVTx2hkYQogOXKqpzSY4" />
+
         <activity android:name=".activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,11 +26,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.AllBookingsActivity"/>
-        <activity android:name=".activity.ParcelBookingActivity"/>
+        <activity android:name=".activity.ParcelBookingActivity" android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".activity.CancelHistoryActivity"/>
         <activity android:name=".activity.ChangePasswordActivity"/>
-        <activity android:name=".activity.RegisterActivity"/>
+        <activity android:name=".activity.RegisterActivity" android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".activity.MainActivity"/>
+        <activity android:name=".activity.OTPValidationActivity"/>
+        <activity android:name=".activity.PlacesAutoCompleteActivity"/>
 
     </application>
 

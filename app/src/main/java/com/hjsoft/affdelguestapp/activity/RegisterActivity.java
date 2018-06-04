@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.gson.JsonObject;
 import com.hjsoft.affdelguestapp.R;
+import com.hjsoft.affdelguestapp.SessionManager;
 import com.hjsoft.affdelguestapp.model.Pojo;
 import com.hjsoft.affdelguestapp.webservice.API;
 import com.hjsoft.affdelguestapp.webservice.RestClient;
@@ -33,6 +35,7 @@ public class RegisterActivity extends AppCompatActivity {
     int PRIVATE_MODE = 0;
     ProgressDialog progressDialog;
     private static final String PREF_NAME = "SharedPref";
+    SessionManager session;
 
 
     @Override
@@ -52,6 +55,8 @@ public class RegisterActivity extends AppCompatActivity {
         etAddress=(EditText)findViewById(R.id.ar_et_address);
         etCity=(EditText)findViewById(R.id.ar_et_city);
         btGetOtp=(Button)findViewById(R.id.ar_bt_get_otp);
+
+        session=new SessionManager(getApplicationContext());
 
         btGetOtp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,9 +82,9 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this,"Invalid mobile number!",Toast.LENGTH_SHORT).show();
                     etMobileNumber.setText("");
                 }
-                else if(!(android.util.Patterns.EMAIL_ADDRESS.matcher(stMobile).matches()))
+                else if(!(android.util.Patterns.EMAIL_ADDRESS.matcher(stEmail).matches()))
                 {
-                    Toast.makeText(RegisterActivity.this,"Please enter valid mobile number!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this,"Please enter valid email-id!",Toast.LENGTH_SHORT).show();
                     etEmail.setText("");
                 }
                 else if(!(stPwd.equals(stCPwd)))
@@ -89,6 +94,9 @@ public class RegisterActivity extends AppCompatActivity {
                     etConfirmPassword.setText("");
                 }
                 else {
+
+                    System.out.println("@@@@@@@@@@"+stName+":"+stMobile+":"+stCity+":"+stAddress+":"+stEmail+":"+stPwd+":"+stCPwd);
+
                     JsonObject v = new JsonObject();
                     v.addProperty("name", stName);
                     v.addProperty("mobile", stMobile);
@@ -117,12 +125,25 @@ public class RegisterActivity extends AppCompatActivity {
 
                             if (response.isSuccessful()) {
                                 Intent i = new Intent(RegisterActivity.this, OTPValidationActivity.class);
-                                startActivity(i);
+                                i.putExtra("name",stName);
+                                i.putExtra("mobile",stMobile);
+                                i.putExtra("city",stCity);
+                                i.putExtra("address",stAddress);
+                                i.putExtra("email",stEmail);
+                                i.putExtra("password",stPwd);
+                                i.putExtra("confirmpassword",stCPwd);
+                                startActivityForResult(i,2);
+                            }
+                            else {
+                                Log.i("Register",response.message());
                             }
                         }
 
                         @Override
                         public void onFailure(Call<Pojo> call, Throwable t) {
+
+                            Toast.makeText(RegisterActivity.this,"Please check Internet connection!",Toast.LENGTH_SHORT).show();
+                            t.printStackTrace();
 
                         }
                     });
@@ -136,5 +157,38 @@ public class RegisterActivity extends AppCompatActivity {
 
 
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode)
+        {
+            case 2:
+                if(data!=null)
+                {
+                    String res=data.getStringExtra("result");
+                    String profileId=data.getStringExtra("profileid");
+
+                    System.out.println("*******"+res+":::"+profileId);
+
+                    if(res.equals("ok"))
+                    {
+                        session.createLoginSession(stMobile,stPwd,profileId);
+                        Intent i=new Intent(RegisterActivity.this,ParcelBookingActivity.class);
+                        startActivity(i);
+                        finish();
+                    }
+                    else {
+
+                        etMobileNumber.setText(" ");
+                        Toast.makeText(RegisterActivity.this,"Please enter the correct mobile number!",Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+                break;
+
+        }
     }
 }

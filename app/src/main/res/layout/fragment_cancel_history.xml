@@ -3,10 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="16dp"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingTop="16dp"
     tools:context=".activity.MainActivity"
     android:background="@drawable/bg"
     android:orientation="vertical">
@@ -14,86 +10,116 @@
     <ImageView android:id="@+id/am_iv_logo"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:layout_marginBottom="24dp"
         android:src="@drawable/logo"/>
-    <TextView
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="From Date"
-        android:textColor="@color/colorWhite"
-        android:textSize="10sp"
-        android:gravity="left"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp"
-        android:textAllCaps="true"/>
+        android:orientation="horizontal"
+        >
 
-    <EditText
-        android:id="@+id/am_et_mobile_no"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/am_iv_logo"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/et_bg"
-        android:drawableRight="@drawable/calendar"
-        android:hint="From Date"
-        android:inputType="text"
-        android:maxLines="1"
-        android:padding="8dp"
-        android:textColorHint="#000000"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="From Date"
+                android:textColor="@color/colorWhite"
+                android:textSize="10sp"
+                android:gravity="left"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:textAllCaps="true"/>
 
-        android:textSize="16sp" />
+            <TextView
+                android:id="@+id/am_et_mobile_no"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/am_iv_logo"
+                android:layout_marginLeft="32dp"
+                android:layout_marginRight="32dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/et_bg"
+                android:drawableRight="@drawable/calendar"
+                android:hint="From Date"
+                android:inputType="text"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:textColorHint="#000000"
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="To Date"
-        android:textColor="@color/colorWhite"
-        android:textSize="10sp"
-        android:gravity="left"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp"
-        android:textAllCaps="true"
-        android:layout_marginTop="16dp"/>
+                android:textSize="14sp" />
 
-    <EditText
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="To Date"
+                android:textColor="@color/colorWhite"
+                android:textSize="10sp"
+                android:gravity="left"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:textAllCaps="true"
+                android:layout_marginTop="8dp"/>
 
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/am_iv_logo"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/et_bg"
-        android:drawableRight="@drawable/calendar"
-        android:hint="To Date"
-        android:inputType="text"
-        android:maxLines="1"
-        android:padding="8dp"
-        android:textColorHint="#000000"
+            <TextView
 
-        android:textSize="16sp" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/am_iv_logo"
+                android:layout_marginLeft="32dp"
+                android:layout_marginRight="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/et_bg"
+                android:drawableRight="@drawable/calendar"
+                android:hint="To Date"
+                android:inputType="text"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:textColorHint="#000000"
+                android:textSize="14sp" />
 
-    <Button android:id="@+id/am_bt_login"
+        </LinearLayout>
+
+        <TextView android:id="@+id/am_bt_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bt_bg"
+            android:text="Get Bookings"
+            android:textAllCaps="false"
+            android:textSize="14sp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:padding="6dp"
+            android:visibility="gone"
+            android:layout_marginRight="24dp"
+
+            />
+
+
+    </LinearLayout>
+
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/bt_bg"
         android:text="Submit"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginBottom="12dp"
         android:textAllCaps="false"
-        android:textSize="18sp"
-        android:padding="8dp"
+        android:textSize="16sp"
         android:layout_gravity="center"
         android:gravity="center"
-        />
+        android:visibility="gone"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#ffffff"
-        android:layout_marginTop="12dp"
+        android:background="@color/colorAccent"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="4dp"/>
 
     <android.support.v7.widget.RecyclerView

@@ -11,6 +11,8 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonObject;
@@ -28,16 +30,15 @@ public class OTPValidationActivity extends AppCompatActivity {
     Button btValidateOtp;
     String stOtp1,stOtp2,stOtp3,stOtp4;
     API REST_CLIENT;
-
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     int PRIVATE_MODE = 0;
     ProgressDialog progressDialog;
     private static final String PREF_NAME = "SharedPref";
-
     String stMobile,stName,stEmail,stPwd,stCPwd,stAddress,stCity;
-
-
+    Bundle b;
+    TextView tvMobileNumber;
+    ImageView ivEditMobile;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,21 +50,40 @@ public class OTPValidationActivity extends AppCompatActivity {
         etOtp3=(EditText)findViewById(R.id.arc_et_otp3);
         etOtp4=(EditText)findViewById(R.id.arc_et_otp4);
         btValidateOtp=(Button)findViewById(R.id.arc_bt_validate_otp);
+        tvMobileNumber=(TextView)findViewById(R.id.arc_tv_mobile_number);
+        ivEditMobile=(ImageView)findViewById(R.id.arc_iv_edit_number);
         pref = getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         editor = pref.edit();
 
-        stName=pref.getString("name",null);
-        stMobile=pref.getString("mobile",null);
-        stCity=pref.getString("city",null);
-        stAddress=pref.getString("address",null);
-        stEmail=pref.getString("email",null);
-        stPwd=pref.getString("password",null);
-        stCPwd=pref.getString("confirmpassword",null);
+        b=getIntent().getExtras();
+
+        stName=b.getString("name",null);
+        stMobile=b.getString("mobile",null);
+        stCity=b.getString("city",null);
+        stAddress=b.getString("address",null);
+        stEmail=b.getString("email",null);
+        stPwd=b.getString("password",null);
+        stCPwd=b.getString("confirmpassword",null);
+
+        tvMobileNumber.setText(stMobile);
 
         etOtp1.addTextChangedListener(new GenericTextWatcher(etOtp1));
         etOtp2.addTextChangedListener(new GenericTextWatcher(etOtp2));
         etOtp3.addTextChangedListener(new GenericTextWatcher(etOtp3));
         etOtp4.addTextChangedListener(new GenericTextWatcher(etOtp4));
+
+        ivEditMobile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent i = new Intent();
+                i.putExtra("result","");
+                i.putExtra("profileid","");
+                setResult(2, i);
+                finish();
+
+            }
+        });
 
         btValidateOtp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,7 +95,7 @@ public class OTPValidationActivity extends AppCompatActivity {
                 stOtp4=etOtp4.getText().toString().trim();
 
                 if(stOtp1.length()==0||stOtp2.length()==0||stOtp3.length()==0||stOtp4.length()==0){
-                    Toast.makeText(OTPValidationActivity.this, "Enter valid OTP", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OTPValidationActivity.this, "Invalid OTP!", Toast.LENGTH_SHORT).show();
                 }
                 else{
 
@@ -102,10 +122,19 @@ public class OTPValidationActivity extends AppCompatActivity {
 
                             if(response.isSuccessful()){
 
+                                otpPojo=response.body();
+                                String profileId=otpPojo.getMessage();
+
                                 Toast.makeText(OTPValidationActivity.this,"OTP successfully validated!",Toast.LENGTH_SHORT).show();
 
-                                Intent k=new Intent(OTPValidationActivity.this,ParcelBookingActivity.class);
+                                /*Intent k=new Intent(OTPValidationActivity.this,ParcelBookingActivity.class);
                                 startActivity(k);
+                                finish();*/
+
+                                Intent i = new Intent();
+                                i.putExtra("result","ok");
+                                i.putExtra("profileid",profileId);
+                                setResult(2, i);
                                 finish();
                             }
 
