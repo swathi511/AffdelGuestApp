@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.icu.text.UnicodeSetSpanner;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -111,77 +112,98 @@ public class MainActivity extends AppCompatActivity {
                 stLogin=etLogin.getText().toString().trim();
                 stPwd=etPwd.getText().toString().trim();
 
-                JsonObject v=new JsonObject();
-                v.addProperty("login",stLogin);
-                v.addProperty("pwd",stPwd);
-                v.addProperty("version",version);
+                if(stLogin.length()==0||stPwd.length()==0)
+                {
+                    Toast.makeText(MainActivity.this,"Please enter all the details!",Toast.LENGTH_SHORT).show();
+                }
+                else if(stLogin.length()!=10)
+                {
+                    Toast.makeText(MainActivity.this,"Please enter valid mobile number!",Toast.LENGTH_SHORT).show();
+                }
+                else {
 
-                Call<Pojo> call=REST_CLIENT.sendLoginDetails(v);
-                call.enqueue(new Callback<Pojo>() {
-                    @Override
-                    public void onResponse(Call<Pojo> call, Response<Pojo> response) {
+                    JsonObject v = new JsonObject();
+                    v.addProperty("login", stLogin);
+                    v.addProperty("pwd", stPwd);
+                    v.addProperty("version", version);
 
-                        Pojo data;
-                        String s;
+                    Call<Pojo> call = REST_CLIENT.sendLoginDetails(v);
+                    call.enqueue(new Callback<Pojo>() {
+                        @Override
+                        public void onResponse(Call<Pojo> call, Response<Pojo> response) {
 
-                        if(response.isSuccessful())
-                        {
-                            data = response.body();
-                            s = data.getMessage();
-                            stProfileId = s.split("-")[0];
+                            Pojo data;
+                            String s;
 
-                            if(s.split("-").length==1)
-                            {
-                                JsonObject v = new JsonObject();
-                                v.addProperty("guestprofileid", stProfileId);
-                                v.addProperty("imei", stDeviceId);
+                            if (response.isSuccessful()) {
+                                data = response.body();
+                                s = data.getMessage();
+                                stProfileId = s.split("-")[0];
 
-                                Call<Pojo> call1 = REST_CLIENT.updateIMEI(v);
-                                call1.enqueue(new Callback<Pojo>() {
-                                    @Override
-                                    public void onResponse(Call<Pojo> call, Response<Pojo> response) {
+                                if (s.split("-").length == 1) {
+                                    JsonObject v = new JsonObject();
+                                    v.addProperty("guestprofileid", stProfileId);
+                                    v.addProperty("imei", stDeviceId);
 
-                                        if(response.isSuccessful())
-                                        {
-                                            Intent i=new Intent(MainActivity.this,ParcelBookingActivity.class);
-                                            startActivity(i);
-                                            finish();
+                                    Call<Pojo> call1 = REST_CLIENT.updateIMEI(v);
+                                    call1.enqueue(new Callback<Pojo>() {
+                                        @Override
+                                        public void onResponse(Call<Pojo> call, Response<Pojo> response) {
+
+                                            if (response.isSuccessful()) {
+                                                Intent i = new Intent(MainActivity.this, ParcelBookingActivity.class);
+                                                startActivity(i);
+                                                finish();
+                                            }
                                         }
-                                    }
 
-                                    @Override
-                                    public void onFailure(Call<Pojo> call, Throwable t) {
+                                        @Override
+                                        public void onFailure(Call<Pojo> call, Throwable t) {
 
-                                    }
-                                });
-                            }
-                            else {
+                                            Toast.makeText(MainActivity.this,"Please check Internet connection!", Toast.LENGTH_SHORT).show();
 
-                                Log.i("MA","IMEI "+stDeviceId);
-
-                                if (stDeviceId.equals(s.split("-")[2])) {
-                                    Intent i = new Intent(MainActivity.this, ParcelBookingActivity.class);
-                                    startActivity(i);
-                                    finish();
+                                        }
+                                    });
                                 } else {
 
+                                    Log.i("MA", "IMEI " + stDeviceId);
 
-                                    activateLogin();
+                                    if (stDeviceId.equals(s.split("-")[2])) {
+                                        Intent i = new Intent(MainActivity.this, ParcelBookingActivity.class);
+                                        startActivity(i);
+                                        finish();
+                                    } else {
+
+                                        activateLogin();
+                                    }
                                 }
+                            } else {
+
+                                data = response.body();
+                                s = data.getMessage();
+
+                                if(s.equals("Version mismatched"))
+                                {
+                                    Toast.makeText(MainActivity.this,"Please update the app from playstore",Toast.LENGTH_SHORT).show();
+                                }
+                                else {
+
+                                    Toast.makeText(MainActivity.this, "Invalid credentials!", Toast.LENGTH_SHORT).show();
+                                    etLogin.setText("");
+                                    etPwd.setText("");
+
+                                }
+
                             }
                         }
-                        else {
 
-                            Toast.makeText(MainActivity.this,"Please fill the correct details!",Toast.LENGTH_SHORT).show();
+                        @Override
+                        public void onFailure(Call<Pojo> call, Throwable t) {
+
+                            Toast.makeText(MainActivity.this, "Please check the internet connection!", Toast.LENGTH_SHORT).show();
                         }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Pojo> call, Throwable t) {
-
-                        Toast.makeText(MainActivity.this,"Please check the internet connection!",Toast.LENGTH_SHORT).show();
-                    }
-                });
+                    });
+                }
 
 
 
@@ -206,7 +228,6 @@ public class MainActivity extends AppCompatActivity {
             v.addProperty("pwd", stPwd);
             v.addProperty("version", version);
 
-
             Call<Pojo> call = REST_CLIENT.sendLoginDetails(v);
             call.enqueue(new Callback<Pojo>() {
                 @Override
@@ -220,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
                         s = data.getMessage();
                         stProfileId = s.split("-")[0];
 
-                        if (s.split("-").length == 0) {
+                        if (s.split("-").length == 1) {
                             JsonObject v = new JsonObject();
                             v.addProperty("guestprofileid", stProfileId);
                             v.addProperty("imei", stDeviceId);
@@ -236,26 +257,28 @@ public class MainActivity extends AppCompatActivity {
                                         startActivity(i);
                                         finish();
                                     }
-
-
                                 }
 
                                 @Override
                                 public void onFailure(Call<Pojo> call, Throwable t) {
 
+                                    Toast.makeText(MainActivity.this,"Please check Internet connection!",Toast.LENGTH_SHORT).show();
+
                                 }
                             });
-                        } else {
+                        }
+                        else {
 
                             if (stDeviceId.equals(s.split("-")[2])) {
+
                                 Intent i = new Intent(MainActivity.this, ParcelBookingActivity.class);
                                 startActivity(i);
                                 finish();
+
                             } else {
 
                                 Toast.makeText(MainActivity.this, "Profile is active in other device\nHence deactivating here!", Toast.LENGTH_LONG).show();
                                 session.logoutUser();
-
 
                             }
                         }
@@ -269,79 +292,80 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<Pojo> call, Throwable t) {
 
+                    Toast.makeText(MainActivity.this,"Please check Internet connection!",Toast.LENGTH_SHORT).show();
                 }
             });
 
         }
 
     }
-        public void activateLogin()
-        {
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this);
+    public void activateLogin()
+    {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this);
 
-            LayoutInflater inflater = getLayoutInflater();
-            final View dialogView = inflater.inflate(R.layout.alert_profile_active, null);
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.alert_profile_active, null);
 
-            dialogBuilder.setView(dialogView);
+        dialogBuilder.setView(dialogView);
 
-            final AlertDialog alertDialog = dialogBuilder.create();
-            alertDialog.show();
-            alertDialog.setCancelable(false);
-            alertDialog.setCanceledOnTouchOutside(false);
+        final AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+        alertDialog.setCancelable(false);
+        alertDialog.setCanceledOnTouchOutside(false);
 
-            Button btOk=(Button)dialogView.findViewById(R.id.apa_bt_ok);
-            Button btCancel=(Button)dialogView.findViewById(R.id.apa_bt_cancel);
+        Button btOk=(Button)dialogView.findViewById(R.id.apa_bt_ok);
+        Button btCancel=(Button)dialogView.findViewById(R.id.apa_bt_cancel);
 
-            btOk.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+        btOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-                    JsonObject v=new JsonObject();
-                    v.addProperty("guestprofileid",stProfileId);
-                    v.addProperty("imei",stDeviceId);
+                JsonObject v=new JsonObject();
+                v.addProperty("guestprofileid",stProfileId);
+                v.addProperty("imei",stDeviceId);
 
-                    Call<Pojo> call1=REST_CLIENT.updateIMEI(v);
-                    call1.enqueue(new Callback<Pojo>() {
-                        @Override
-                        public void onResponse(Call<Pojo> call, Response<Pojo> response) {
+                Call<Pojo> call1=REST_CLIENT.updateIMEI(v);
+                call1.enqueue(new Callback<Pojo>() {
+                    @Override
+                    public void onResponse(Call<Pojo> call, Response<Pojo> response) {
 
-                            if(response.isSuccessful())
-                            {
-                                alertDialog.dismiss();
-                                session.createLoginSession(stLogin,stPwd,stProfileId);
-                                Intent i=new Intent(MainActivity.this,ParcelBookingActivity.class);
-                                startActivity(i);
-                                finish();
-                            }
-
-
+                        if(response.isSuccessful())
+                        {
+                            alertDialog.dismiss();
+                            session.createLoginSession(stLogin,stPwd,stProfileId);
+                            Intent i=new Intent(MainActivity.this,ParcelBookingActivity.class);
+                            startActivity(i);
+                            finish();
                         }
 
-                        @Override
-                        public void onFailure(Call<Pojo> call, Throwable t) {
 
-                        }
-                    });
-                }
-            });
+                    }
 
-            btCancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                    @Override
+                    public void onFailure(Call<Pojo> call, Throwable t) {
 
-                    alertDialog.dismiss();
-                    etLogin.setText("");
-                    etPwd.setText("");
-                }
-            });
-        }
+                    }
+                });
+            }
+        });
+
+        btCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                alertDialog.dismiss();
+                etLogin.setText("");
+                etPwd.setText("");
+            }
+        });
+    }
 
 
 
-        @SuppressLint({"HardwareIds","MissingPermission"})
-        @Override
-        @TargetApi(26)
-        public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    @SuppressLint({"HardwareIds","MissingPermission"})
+    @Override
+    @TargetApi(26)
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
         if(requestCode==REQUEST_LOCATION) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -367,5 +391,5 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    }
+}
 

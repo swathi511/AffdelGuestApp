@@ -74,7 +74,6 @@ public class RegisterActivity extends AppCompatActivity {
                 v.addProperty("confirmpassword",stCPwd);
                 v.addProperty("otp","");
 
-
                 editor.putString("name",stName);
                 editor.putString("mobile",stMobile);
                 editor.putString("city",stCity);
@@ -83,6 +82,8 @@ public class RegisterActivity extends AppCompatActivity {
                 editor.putString("password",stPwd);
                 editor.putString("confirmpassword",stCPwd);
                 editor.commit();
+
+                System.out.println("username"+stName);
 
                 Call<Pojo> call=REST_CLIENT.userRegister(v);
                 call.enqueue(new Callback<Pojo>() {
@@ -93,8 +94,6 @@ public class RegisterActivity extends AppCompatActivity {
                         {
                             Intent i=new Intent(RegisterActivity.this,OTPValidationActivity.class);
                             startActivity(i);
-
-                            System.out.print("responce is"+response);
                         }
                     }
 
