@@ -78,7 +78,7 @@ public class ChangePasswordFragment extends Fragment {
                     stProfileId=user.get(SessionManager.KEY_PROFILE_ID);
 
                     JsonObject v=new JsonObject();
-                    v.addProperty("guestprofileid","");
+                    v.addProperty("guestprofileid",stProfileId);
                     v.addProperty("oldpassword",stOldPwd);
                     v.addProperty("newpassword",stNewPwd);
 
