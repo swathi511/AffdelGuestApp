@@ -74,6 +74,7 @@ public class RegisterActivity extends AppCompatActivity {
                 v.addProperty("confirmpassword",stCPwd);
                 v.addProperty("otp","");
 
+
                 editor.putString("name",stName);
                 editor.putString("mobile",stMobile);
                 editor.putString("city",stCity);
@@ -92,6 +93,8 @@ public class RegisterActivity extends AppCompatActivity {
                         {
                             Intent i=new Intent(RegisterActivity.this,OTPValidationActivity.class);
                             startActivity(i);
+
+                            System.out.print("responce is"+response);
                         }
                     }
 
