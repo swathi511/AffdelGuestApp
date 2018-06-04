@@ -24,5 +24,10 @@ public interface API {
     @POST("Register/AddUserDetails")
     Call<Pojo> userRegister(@Body JsonObject v);
 
+    @POST("Registerwithotp/AddUserDetailswithOTP")
+    Call<Pojo> otpValidation(@Body JsonObject v);
+
+
+
 
 }
